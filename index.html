@@ -112,7 +112,7 @@
 
   .stage{
     position:relative;margin:0 10px 10px;border-radius:16px;overflow:hidden;
-    min-height:280px;padding:14px 8px 10px;display:flex;align-items:flex-end;justify-content:center;
+    min-height:300px;padding:14px 8px 10px;display:flex;align-items:flex-end;justify-content:center;
   }
   .room[data-room="work"] .stage{background:linear-gradient(180deg,#f2f9fe 0%,#e6f3fc 100%)}
   .room[data-room="meeting"] .stage{background:linear-gradient(180deg,#f1faf6 0%,#e3f6ef 100%)}
@@ -135,21 +135,21 @@
 
   /* character */
   .pickle{
-    width:88px;flex:0 0 auto;display:flex;flex-direction:column;align-items:center;
+    width:100px;flex:0 0 auto;display:flex;flex-direction:column;align-items:center;
     cursor:pointer;user-select:none;position:relative;transition:transform .15s ease;
   }
   .room.has-sel .pickle:hover{transform:translateY(-3px)}
-  .pickle .avatar{width:62px;height:62px;transition:transform .2s}
+  .pickle .avatar{width:76px;height:76px;transition:transform .2s}
   .pickle.sel .avatar{transform:translateY(-3px) scale(1.06)}
   .pickle.sel::after{
     content:"";position:absolute;left:50%;bottom:16px;transform:translateX(-50%);
-    width:66px;height:66px;border-radius:50%;border:2.5px dashed #7ec8e3;
+    width:78px;height:78px;border-radius:50%;border:2.5px dashed #7ec8e3;
     animation:spin 9s linear infinite;pointer-events:none;
   }
   @keyframes spin{to{transform:translateX(-50%) rotate(360deg)}}
   .pickle .bubble{
-    position:relative;max-width:118px;background:#fff;border-radius:13px;
-    padding:6px 9px;font-size:11.5px;line-height:1.35;font-weight:600;color:#4b4356;
+    position:relative;max-width:132px;background:#fff;border-radius:13px;
+    padding:6px 9px;font-size:12px;line-height:1.35;font-weight:600;color:#4b4356;
     box-shadow:0 3px 10px rgba(120,100,80,.14);margin-bottom:7px;word-break:keep-all;
     text-align:center;
   }
@@ -157,9 +157,9 @@
     content:"";position:absolute;left:50%;bottom:-5px;transform:translateX(-50%) rotate(45deg);
     width:9px;height:9px;background:#fff;border-radius:2px;
   }
-  .pickle .plate{display:flex;align-items:center;gap:4px;margin-top:3px;font-size:11.5px;font-weight:800;color:#4b4356}
-  .pickle .dot{width:6px;height:6px;border-radius:50%;flex:0 0 auto}
-  .pickle .prole{font-size:10.5px;color:#8a8292;margin-top:1px;text-align:center;line-height:1.2}
+  .pickle .plate{display:flex;align-items:center;gap:4px;margin-top:4px;font-size:12.5px;font-weight:800;color:#4b4356}
+  .pickle .dot{width:7px;height:7px;border-radius:50%;flex:0 0 auto}
+  .pickle .prole{font-size:11px;color:#8a8292;margin-top:1px;text-align:center;line-height:1.2}
   .dot.s-work{background:#4c9fe0}
   .dot.s-meeting{background:#2fae8a}
   .dot.s-rest{background:#e8995f}
@@ -284,7 +284,7 @@
     .brand h1{font-size:19px}
     .brand-mark{width:44px;height:44px;border-radius:13px;font-size:22px}
     .rooms{grid-template-columns:1fr}
-    .stage{min-height:250px}
+    .stage{min-height:270px}
     .top-actions{width:100%}
     .top-actions .btn{flex:1;justify-content:center}
     .chip{flex:1 0 100%;justify-content:center}
