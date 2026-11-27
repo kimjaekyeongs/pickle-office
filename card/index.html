@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>김재경 · 명함</title>
+<meta name="description" content="김재경 — 경북 구미시 · 성실함과 책임감으로 함께합니다. 전화·이메일·연락처 저장을 한 번에.">
+<meta name="theme-color" content="#0f1b2d">
+<meta name="format-detection" content="telephone=yes">
+<meta property="og:type" content="profile">
+<meta property="og:title" content="김재경 · 명함">
+<meta property="og:description" content="경북 구미시 · 성실함과 책임감으로 함께합니다">
+<meta property="og:url" content="https://kimjaekyeongs.github.io/pickle-office/card/">
+<link rel="canonical" href="https://kimjaekyeongs.github.io/pickle-office/card/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🪪</text></svg>">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+<style>
+  :root{
+    --page:#eae3d5;
+    --page2:#ded4c1;
+    --card:#0f1b2d;
+    --card2:#15243a;
+    --ivory:#f6f1e6;
+    --ivory-soft:#cfc7b6;
+    --ivory-mute:#a79e8c;
+    --gold:#c9a45c;
+    --gold-light:#e7cf98;
+    --gold-deep:#a5813c;
+    --line:rgba(201,164,92,.28);
+    --line-soft:rgba(246,241,230,.12);
+    --r:22px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:"Pretendard Variable",Pretendard,"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+    background:
+      radial-gradient(900px 500px at 50% -10%, #f5efe4 0%, rgba(245,239,228,0) 70%),
+      linear-gradient(170deg, var(--page) 0%, var(--page2) 100%);
+    color:var(--ivory);
+    min-height:100vh;
+    min-height:100dvh;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    padding:0;
+  }
+  button{font-family:inherit;font-size:inherit;color:inherit;background:none;border:none;padding:0;cursor:pointer}
+  a{color:inherit;text-decoration:none}
+  :focus-visible{outline:2px solid var(--gold-light);outline-offset:3px;border-radius:8px}
+
+  .stage{
+    max-width:520px;
+    margin:0 auto;
+    padding:0 0 34px;
+  }
+
+  /* ---------- 명함 카드 ---------- */
+  .card{
+    position:relative;
+    background:
+      radial-gradient(120% 80% at 100% 0%, rgba(201,164,92,.16) 0%, rgba(201,164,92,0) 55%),
+      radial-gradient(90% 60% at 0% 100%, rgba(90,130,190,.16) 0%, rgba(90,130,190,0) 60%),
+      linear-gradient(165deg, var(--card) 0%, var(--card2) 100%);
+    padding:34px 22px 26px;
+    padding-top:calc(34px + env(safe-area-inset-top));
+    overflow:hidden;
+  }
+  /* 얇은 금색 안쪽 테두리 */
+  .card::before{
+    content:"";
+    position:absolute;
+    inset:11px;
+    border:1px solid var(--line);
+    border-radius:6px;
+    pointer-events:none;
+  }
+
+  /* ---------- 머리말 ---------- */
+  .head{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:16px;
+    padding:2px 6px 0;
+  }
+  .seal{
+    flex:0 0 auto;
+    width:74px;height:74px;
+    border-radius:50%;
+    display:grid;place-items:center;
+    background:linear-gradient(150deg, #f3e2b8 0%, var(--gold) 46%, var(--gold-deep) 100%);
+    box-shadow:0 6px 18px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.5);
+    color:#16233a;
+    font-weight:900;
+    font-size:34px;
+    letter-spacing:-.03em;
+    line-height:1;
+    padding-bottom:2px;
+  }
+  .head-txt{min-width:0}
+  .eyebrow{
+    display:block;
+    font-size:12.5px;
+    font-weight:700;
+    letter-spacing:.24em;
+    color:var(--gold);
+    margin:0 0 6px;
+    text-transform:uppercase;
+  }
+  .name{
+    margin:0;
+    font-size:40px;
+    line-height:1.12;
+    font-weight:900;
+    letter-spacing:.02em;
+    background:linear-gradient(100deg, #fffaf0 8%, var(--gold-light) 52%, #f7ecd2 96%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    -webkit-text-fill-color:transparent;
+  }
+
+  .tagline{
+    margin:20px 6px 0;
+    font-size:17.5px;
+    line-height:1.65;
+    font-weight:500;
+    color:var(--ivory);
+    letter-spacing:-.01em;
+  }
+  .tagline .dot{color:var(--gold);padding:0 2px;font-weight:700}
+  .tagline .place{color:var(--gold-light);font-weight:700}
+
+  /* ---------- 원터치 버튼 ---------- */
+  .actions{
+    margin-top:24px;
+    display:flex;
+    flex-direction:column;
+    gap:11px;
+  }
+  .btn{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    width:100%;
+    min-height:74px;
+    padding:13px 16px;
+    text-align:left;
+    border-radius:16px;
+    background:rgba(246,241,230,.055);
+    border:1px solid var(--line-soft);
+    transition:background .18s ease, border-color .18s ease, transform .12s ease;
+  }
+  .btn:active{transform:scale(.985)}
+  .btn .icon{
+    flex:0 0 auto;
+    width:44px;height:44px;
+    border-radius:13px;
+    display:grid;place-items:center;
+    font-size:22px;
+    background:rgba(201,164,92,.14);
+    border:1px solid var(--line);
+    line-height:1;
+  }
+  .btn .label{
+    flex:1 1 auto;
+    min-width:0;
+    display:flex;
+    flex-direction:column;
+    gap:3px;
+  }
+  .btn .kind{
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.16em;
+    color:var(--gold);
+    line-height:1.2;
+  }
+  .btn .value{
+    font-size:21px;
+    font-weight:700;
+    letter-spacing:.01em;
+    color:var(--ivory);
+    line-height:1.3;
+    overflow-wrap:anywhere;
+  }
+  .btn .arrow{
+    flex:0 0 auto;
+    color:var(--ivory-mute);
+    font-size:19px;
+    line-height:1;
+  }
+  @media (hover:hover){
+    .btn:hover{background:rgba(246,241,230,.1);border-color:var(--line)}
+  }
+
+  /* 피클 초대 — 금색 강조 */
+  .btn.invite{
+    background:linear-gradient(135deg, #f0dfb2 0%, var(--gold) 55%, #b18c44 100%);
+    border-color:rgba(255,255,255,.34);
+    box-shadow:0 8px 22px rgba(0,0,0,.28);
+    min-height:80px;
+  }
+  .btn.invite .icon{
+    background:rgba(22,35,58,.12);
+    border-color:rgba(22,35,58,.18);
+  }
+  .btn.invite .kind{color:#4a3a16}
+  .btn.invite .value{color:#12203a;font-size:19.5px;font-weight:800}
+  .btn.invite .arrow{color:#3d2f12}
+  @media (hover:hover){
+    .btn.invite:hover{filter:brightness(1.04);border-color:rgba(255,255,255,.5)}
+  }
+
+  /* ---------- 구역 ---------- */
+  .section{
+    margin:26px 6px 0;
+    padding-top:22px;
+    border-top:1px solid var(--line);
+  }
+  .section h2{
+    margin:0 0 14px;
+    font-size:13px;
+    font-weight:800;
+    letter-spacing:.22em;
+    color:var(--gold);
+    display:flex;
+    align-items:center;
+    gap:9px;
+  }
+  .section h2::after{
+    content:"";
+    flex:1 1 auto;
+    height:1px;
+    background:linear-gradient(90deg, var(--line), rgba(201,164,92,0));
+  }
+
+  .row{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:12px;
+    padding:9px 0;
+  }
+  .row + .row{border-top:1px dashed rgba(246,241,230,.1)}
+  .row .what{
+    font-size:19px;
+    font-weight:600;
+    color:var(--ivory);
+    letter-spacing:-.01em;
+    line-height:1.45;
+  }
+  .row .when{
+    flex:0 0 auto;
+    font-size:14.5px;
+    font-weight:700;
+    color:var(--gold-light);
+    font-variant-numeric:tabular-nums;
+    white-space:nowrap;
+    letter-spacing:.01em;
+  }
+
+  ul.certs{
+    margin:0;
+    padding:0;
+    list-style:none;
+    display:flex;
+    flex-direction:column;
+    gap:11px;
+  }
+  ul.certs li{
+    position:relative;
+    padding-left:22px;
+    font-size:18.5px;
+    font-weight:500;
+    line-height:1.55;
+    color:var(--ivory);
+    letter-spacing:-.01em;
+  }
+  ul.certs li::before{
+    content:"";
+    position:absolute;
+    left:2px;
+    top:.62em;
+    width:7px;height:7px;
+    border-radius:2px;
+    background:var(--gold);
+    transform:rotate(45deg);
+  }
+
+  /* ---------- 실용 버튼 ---------- */
+  .tools{
+    margin:26px 6px 0;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:11px;
+  }
+  .tool{
+    min-height:66px;
+    padding:12px 10px;
+    border-radius:15px;
+    border:1px solid var(--line);
+    background:rgba(246,241,230,.04);
+    color:var(--ivory);
+    font-size:16.5px;
+    font-weight:700;
+    letter-spacing:-.01em;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    text-align:center;
+    transition:background .18s ease, transform .12s ease;
+    line-height:1.3;
+  }
+  .tool:active{transform:scale(.975)}
+  .tool .t-icon{font-size:18px;line-height:1}
+  @media (hover:hover){
+    .tool:hover{background:rgba(201,164,92,.13)}
+  }
+
+  .foot{
+    margin:22px 6px 0;
+    padding-top:16px;
+    border-top:1px solid var(--line-soft);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    font-size:12.5px;
+    color:var(--ivory-mute);
+    letter-spacing:.02em;
+  }
+  .foot .mark{color:var(--gold)}
+  .foot a{color:var(--gold-light)}
+
+  /* ---------- 토스트 ---------- */
+  .toast{
+    position:fixed;
+    left:50%;
+    bottom:calc(26px + env(safe-area-inset-bottom));
+    transform:translate(-50%, 18px);
+    max-width:calc(100vw - 40px);
+    padding:13px 20px;
+    border-radius:999px;
+    background:#f6f1e6;
+    color:#14203a;
+    font-size:16px;
+    font-weight:700;
+    letter-spacing:-.01em;
+    box-shadow:0 10px 30px rgba(0,0,0,.32);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .22s ease, transform .22s ease;
+    z-index:50;
+    text-align:center;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .toast.show{opacity:1;transform:translate(-50%, 0)}
+
+  /* ---------- PC ---------- */
+  @media (min-width:768px){
+    body{
+      padding:52px 24px 64px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+    }
+    .stage{width:100%;max-width:500px;padding-bottom:0}
+    .card{
+      border-radius:var(--r);
+      padding:40px 32px 30px;
+      box-shadow:0 28px 60px -18px rgba(30,40,60,.45), 0 4px 14px rgba(30,40,60,.14);
+    }
+    .name{font-size:44px}
+    .tagline{font-size:18px}
+  }
+  @media (min-width:1200px){
+    .stage{max-width:520px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none !important;animation:none !important}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+  <main class="card" aria-labelledby="card-name">
+
+    <header class="head">
+      <div class="seal" aria-hidden="true">김</div>
+      <div class="head-txt">
+        <span class="eyebrow">Name Card</span>
+        <h1 class="name" id="card-name">김재경</h1>
+      </div>
+    </header>
+
+    <p class="tagline">
+      <span class="place">경북 구미시</span><span class="dot">·</span>성실함과 책임감으로 함께합니다
+    </p>
+
+    <nav class="actions" aria-label="바로 연락하기">
+      <a class="btn" href="tel:010-4931-2062">
+        <span class="icon" aria-hidden="true">📞</span>
+        <span class="label">
+          <span class="kind">전화 걸기</span>
+          <span class="value">010-4931-2062</span>
+        </span>
+        <span class="arrow" aria-hidden="true">›</span>
+      </a>
+
+      <a class="btn" href="mailto:kijaky@gmail.com">
+        <span class="icon" aria-hidden="true">✉️</span>
+        <span class="label">
+          <span class="kind">이메일</span>
+          <span class="value">kijaky@gmail.com</span>
+        </span>
+        <span class="arrow" aria-hidden="true">›</span>
+      </a>
+
+      <a class="btn" href="https://www.instagram.com/g_jaecun/" target="_blank" rel="noopener">
+        <span class="icon" aria-hidden="true">📸</span>
+        <span class="label">
+          <span class="kind">인스타그램</span>
+          <span class="value">@g_jaecun</span>
+        </span>
+        <span class="arrow" aria-hidden="true">›</span>
+      </a>
+
+      <a class="btn invite" href="https://pickle.com/i/NFMWMFF3FQJP" target="_blank" rel="noopener">
+        <span class="icon" aria-hidden="true">🥒</span>
+        <span class="label">
+          <span class="kind">PICKLE INVITE</span>
+          <span class="value">AI 비서 '데이'와 함께하는 피클 초대</span>
+        </span>
+        <span class="arrow" aria-hidden="true">›</span>
+      </a>
+    </nav>
+
+    <section class="section" aria-labelledby="sec-career">
+      <h2 id="sec-career">주요 경력</h2>
+      <div class="row">
+        <span class="what">LIG넥스원 정년퇴임</span>
+        <span class="when">2023.12</span>
+      </div>
+      <div class="row">
+        <span class="what">한국공동주택 경비 근무</span>
+        <span class="when">2026.07 ~ 현재</span>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="sec-cert">
+      <h2 id="sec-cert">보유 자격</h2>
+      <ul class="certs">
+        <li>소방안전관리자 1급 · 위험물관리자</li>
+        <li>위생배관 기능사 · 전자기기 기능사</li>
+        <li>일반경비원 신임교육 이수 · 택시운전 자격증</li>
+      </ul>
+    </section>
+
+    <div class="tools">
+      <button class="tool" type="button" id="copyBtn">
+        <span class="t-icon" aria-hidden="true">🔗</span>
+        <span>명함 링크 복사</span>
+      </button>
+      <button class="tool" type="button" id="vcardBtn">
+        <span class="t-icon" aria-hidden="true">📇</span>
+        <span>내 연락처에 저장</span>
+      </button>
+    </div>
+
+    <footer class="foot">
+      <span><span class="mark">✦</span> 김재경</span>
+      <span>AI 비서 <a href="https://pickle.com/i/NFMWMFF3FQJP" target="_blank" rel="noopener">데이</a>가 만든 명함</span>
+    </footer>
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  var CARD_URL = "https://kimjaekyeongs.github.io/pickle-office/card/";
+
+  var toastEl = document.getElementById("toast");
+  var toastTimer = null;
+  function toast(message) {
+    if (!toastEl) return;
+    toastEl.textContent = message;
+    toastEl.classList.add("show");
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () {
+      toastEl.classList.remove("show");
+    }, 2400);
+  }
+
+  /* ---- 명함 링크 복사 ---- */
+  function legacyCopy(text) {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.top = "-1000px";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    ta.setSelectionRange(0, ta.value.length);
+    var ok = false;
+    try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+    document.body.removeChild(ta);
+    return ok;
+  }
+
+  function copyCardLink() {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(CARD_URL).then(function () {
+        toast("명함 링크를 복사했어요");
+      }).catch(function () {
+        if (legacyCopy(CARD_URL)) toast("명함 링크를 복사했어요");
+        else toast("복사가 안 되면 주소를 길게 눌러 복사해 주세요");
+      });
+    } else if (legacyCopy(CARD_URL)) {
+      toast("명함 링크를 복사했어요");
+    } else {
+      toast("복사가 안 되면 주소를 길게 눌러 복사해 주세요");
+    }
+  }
+
+  var copyBtn = document.getElementById("copyBtn");
+  if (copyBtn) copyBtn.addEventListener("click", copyCardLink);
+
+  /* ---- vCard 저장 ---- */
+  function buildVCard() {
+    var lines = [
+      "BEGIN:VCARD",
+      "VERSION:3.0",
+      "N:김재경;;;;",
+      "FN:김재경",
+      "TEL;TYPE=CELL:010-4931-2062",
+      "EMAIL;TYPE=INTERNET:kijaky@gmail.com",
+      "URL:" + CARD_URL,
+      "END:VCARD"
+    ];
+    return "\uFEFF" + lines.join("\r\n") + "\r\n";
+  }
+  function saveVCard() {
+    var blob = new Blob([buildVCard()], { type: "text/vcard;charset=utf-8" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = "김재경.vcf";
+    a.rel = "noopener";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
+    toast("연락처 파일을 받았어요 · 열어서 저장하세요");
+  }
+  var vcardBtn = document.getElementById("vcardBtn");
+  if (vcardBtn) vcardBtn.addEventListener("click", saveVCard);
+})();
+</script>
+</body>
+</html>
