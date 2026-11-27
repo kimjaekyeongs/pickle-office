@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>피클 합동 비서실</title>
+<meta name="description" content="피클들이 함께 쓰는 합동 비서실 — 작업실, 회의실, 휴게실에서 동료 피클들과 함께 일해요.">
+<meta name="theme-color" content="#fbf7f0">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🏢</text></svg>">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+<style>
+  :root{
+    --bg:#fbf7f0;
+    --bg2:#f4ede2;
+    --card:#ffffff;
+    --ink:#3b3542;
+    --ink-soft:#7a7283;
+    --line:#ece3d6;
+    --sky:#7ec8e3;
+    --work:#6aa9dd;
+    --meeting:#4fb99e;
+    --lounge:#eda06b;
+    --radius:20px;
+    --shadow:0 10px 28px rgba(120,100,80,.10), 0 2px 6px rgba(120,100,80,.06);
+    --shadow-sm:0 4px 14px rgba(120,100,80,.09);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"Pretendard Variable",Pretendard,"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+    background:
+      radial-gradient(1200px 500px at 12% -10%, #e9f5fd 0%, rgba(233,245,253,0) 60%),
+      radial-gradient(900px 480px at 92% 0%, #fdeee2 0%, rgba(253,238,226,0) 62%),
+      var(--bg);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  input,textarea,select{font-family:inherit;color:inherit}
+  h1,h2,h3,h4{margin:0;font-weight:800;letter-spacing:-.02em}
+  .wrap{max-width:1320px;margin:0 auto;padding:22px 20px 60px}
+
+  /* ---------- header ---------- */
+  .top{
+    display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+    margin-bottom:18px;
+  }
+  .brand{display:flex;align-items:center;gap:12px;min-width:0}
+  .brand-mark{
+    width:52px;height:52px;flex:0 0 auto;border-radius:16px;
+    background:linear-gradient(160deg,#d9f0fb,#b7e2f7);
+    display:grid;place-items:center;font-weight:900;font-size:26px;color:#2f7fa8;
+    box-shadow:var(--shadow-sm);
+  }
+  .brand h1{font-size:22px}
+  .brand p{margin:2px 0 0;font-size:12.5px;color:var(--ink-soft)}
+  .top-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .chip{
+    display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;
+    background:#fff;border:1px solid var(--line);font-size:12.5px;color:var(--ink-soft);font-weight:600;
+    box-shadow:0 1px 2px rgba(120,100,80,.04);
+  }
+  .chip .dot{width:7px;height:7px;border-radius:50%;background:#bdb6c4}
+  .chip.live{color:#1f7a63;border-color:#bfe6da;background:#f1fbf7}
+  .chip.live .dot{background:#2fae8a;box-shadow:0 0 0 3px rgba(47,174,138,.16)}
+  .btn{
+    display:inline-flex;align-items:center;gap:6px;padding:9px 14px;border-radius:12px;
+    background:#fff;border:1px solid var(--line);font-size:13.5px;font-weight:700;color:var(--ink);
+    box-shadow:0 1px 2px rgba(120,100,80,.05);transition:transform .12s ease, box-shadow .12s ease, background .12s;
+    white-space:nowrap;
+  }
+  .btn:hover{transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+  .btn:active{transform:translateY(0)}
+  .btn.primary{background:linear-gradient(160deg,#8fd0ea,#63b4dd);color:#08394e;border-color:#7fc3e3}
+  .btn.soft{background:#f7f2ea}
+  .btn.ghost{background:transparent;box-shadow:none}
+  .btn.small{padding:6px 10px;font-size:12.5px;border-radius:10px}
+  .btn.danger{color:#b4453f;border-color:#f1d3d0;background:#fdf4f3}
+
+  /* ---------- layout ---------- */
+  .layout{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:18px;align-items:start}
+  .rooms{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start}
+
+  /* ---------- room ---------- */
+  .room{
+    background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);
+    border:1px solid rgba(236,227,214,.9);overflow:hidden;position:relative;
+    transition:transform .15s ease, box-shadow .15s ease, border-color .15s;
+  }
+  .room.has-sel{cursor:pointer}
+  .room.has-sel:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(120,100,80,.16);border-color:#d8e9f4}
+  .room-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:14px 14px 0}
+  .room-title{display:flex;align-items:center;gap:7px;min-width:0}
+  .room-title .emoji{font-size:18px}
+  .room-title h2{font-size:16px}
+  .room-title .count{
+    font-size:11px;font-weight:800;color:#fff;background:#c9c1b4;border-radius:999px;
+    min-width:20px;height:20px;display:inline-grid;place-items:center;padding:0 6px;
+  }
+  .room-sub{margin:3px 14px 10px;font-size:11.5px;color:var(--ink-soft)}
+  .room[data-room="work"] .room-title .count{background:var(--work)}
+  .room[data-room="meeting"] .room-title .count{background:var(--meeting)}
+  .room[data-room="lounge"] .room-title .count{background:var(--lounge)}
+  .room[data-room="work"] .room-title h2{color:#2f6f9e}
+  .room[data-room="meeting"] .room-title h2{color:#227a67}
+  .room[data-room="lounge"] .room-title h2{color:#a9622f}
+
+  .stage{
+    position:relative;margin:0 10px 10px;border-radius:16px;overflow:hidden;
+    min-height:280px;padding:14px 8px 10px;display:flex;align-items:flex-end;justify-content:center;
+  }
+  .room[data-room="work"] .stage{background:linear-gradient(180deg,#f2f9fe 0%,#e6f3fc 100%)}
+  .room[data-room="meeting"] .stage{background:linear-gradient(180deg,#f1faf6 0%,#e3f6ef 100%)}
+  .room[data-room="lounge"] .stage{background:linear-gradient(180deg,#fdf5ed 0%,#fbe9da 100%)}
+  .stage .deco{position:absolute;inset:auto 0 0 0;width:100%;height:auto;pointer-events:none;opacity:.75}
+  .pickles{
+    position:relative;z-index:2;display:flex;flex-wrap:wrap;gap:14px 14px;
+    align-items:flex-end;justify-content:center;width:100%;padding-bottom:34px;
+  }
+  .stage .hint{
+    position:absolute;z-index:3;left:50%;bottom:8px;transform:translateX(-50%);
+    background:rgba(59,53,66,.82);color:#fff;font-size:11.5px;font-weight:700;
+    padding:5px 11px;border-radius:999px;opacity:0;transition:opacity .15s;pointer-events:none;white-space:nowrap;
+  }
+  .room.has-sel:hover .stage .hint{opacity:1}
+  .empty{
+    position:relative;z-index:2;margin:auto;font-size:12.5px;color:var(--ink-soft);
+    background:rgba(255,255,255,.72);border:1px dashed #d9d1c6;border-radius:14px;padding:14px 16px;
+  }
+
+  /* character */
+  .pickle{
+    width:88px;flex:0 0 auto;display:flex;flex-direction:column;align-items:center;
+    cursor:pointer;user-select:none;position:relative;transition:transform .15s ease;
+  }
+  .room.has-sel .pickle:hover{transform:translateY(-3px)}
+  .pickle .avatar{width:62px;height:62px;transition:transform .2s}
+  .pickle.sel .avatar{transform:translateY(-3px) scale(1.06)}
+  .pickle.sel::after{
+    content:"";position:absolute;left:50%;bottom:16px;transform:translateX(-50%);
+    width:66px;height:66px;border-radius:50%;border:2.5px dashed #7ec8e3;
+    animation:spin 9s linear infinite;pointer-events:none;
+  }
+  @keyframes spin{to{transform:translateX(-50%) rotate(360deg)}}
+  .pickle .bubble{
+    position:relative;max-width:118px;background:#fff;border-radius:13px;
+    padding:6px 9px;font-size:11.5px;line-height:1.35;font-weight:600;color:#4b4356;
+    box-shadow:0 3px 10px rgba(120,100,80,.14);margin-bottom:7px;word-break:keep-all;
+    text-align:center;
+  }
+  .pickle .bubble::after{
+    content:"";position:absolute;left:50%;bottom:-5px;transform:translateX(-50%) rotate(45deg);
+    width:9px;height:9px;background:#fff;border-radius:2px;
+  }
+  .pickle .plate{display:flex;align-items:center;gap:4px;margin-top:3px;font-size:11.5px;font-weight:800;color:#4b4356}
+  .pickle .dot{width:6px;height:6px;border-radius:50%;flex:0 0 auto}
+  .pickle .prole{font-size:10.5px;color:#8a8292;margin-top:1px;text-align:center;line-height:1.2}
+  .dot.s-work{background:#4c9fe0}
+  .dot.s-meeting{background:#2fae8a}
+  .dot.s-rest{background:#e8995f}
+
+  /* ---------- meeting notes ---------- */
+  .notes{border-top:1px dashed var(--line);padding:10px 12px 12px;background:#fbfdfc}
+  .notes-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+  .notes-head h3{font-size:12.5px;color:#227a67}
+  .memo-form{display:flex;gap:6px}
+  .memo-form input{
+    flex:1;min-width:0;border:1px solid #dcebe6;background:#fff;border-radius:10px;
+    padding:7px 10px;font-size:12.5px;outline:none;
+  }
+  .memo-form input:focus{border-color:#8fd2bf;box-shadow:0 0 0 3px rgba(79,185,158,.14)}
+  .memo-list{list-style:none;margin:8px 0 0;padding:0;max-height:148px;overflow:auto;display:flex;flex-direction:column;gap:5px}
+  .memo-list li{
+    display:flex;align-items:flex-start;gap:6px;background:#fff;border:1px solid #e7f2ed;border-radius:10px;
+    padding:6px 8px;font-size:12px;line-height:1.35;
+  }
+  .memo-list .txt{flex:1;min-width:0;word-break:keep-all}
+  .memo-list li.done .txt{text-decoration:line-through;color:#a9a2b2}
+  .memo-list .meta{display:block;font-size:10px;color:#a9a2b2;margin-top:1px}
+  .memo-list .sym{width:18px;height:18px;border-radius:6px;display:grid;place-items:center;font-size:11px;flex:0 0 auto}
+  .memo-list .check{background:#eef8f4;color:#2fae8a}
+  .memo-list .del{background:#fdf2f1;color:#bd5a52}
+  .memo-empty{font-size:11.5px;color:#a9a2b2;padding:6px 2px}
+
+  /* ---------- side panel ---------- */
+  .panel{
+    background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);
+    border:1px solid rgba(236,227,214,.9);padding:16px;position:sticky;top:16px;
+  }
+  .panel h3{font-size:14px;display:flex;align-items:center;gap:6px}
+  .panel .sub{font-size:11.5px;color:var(--ink-soft);margin:3px 0 0}
+  .panel-empty{
+    margin-top:14px;border:1px dashed #e2d9cc;border-radius:14px;padding:18px 14px;text-align:center;
+    font-size:12.5px;color:var(--ink-soft);background:#fdfaf5;
+  }
+  .sel-top{display:flex;align-items:center;gap:11px;margin:14px 0 12px;padding-bottom:12px;border-bottom:1px dashed var(--line)}
+  .sel-top .av{width:54px;height:54px;flex:0 0 auto}
+  .sel-top strong{font-size:15px;display:block}
+  .sel-top span{font-size:11.5px;color:var(--ink-soft)}
+  .field-label{font-size:11.5px;font-weight:800;color:#8a8292;margin:12px 0 6px;letter-spacing:.01em}
+  .seg{display:flex;gap:6px;flex-wrap:wrap}
+  .seg button{
+    padding:7px 10px;border-radius:10px;border:1px solid var(--line);background:#fdfbf7;
+    font-size:12px;font-weight:700;color:#6f6879;transition:.12s;
+  }
+  .seg button:hover{background:#fff;border-color:#dcd2c4}
+  .seg button.on{background:#e9f6fd;border-color:#a9d9ef;color:#1f6c91;box-shadow:inset 0 0 0 1px #a9d9ef}
+  .seg button[data-status="회의 중"].on{background:#e9f8f2;border-color:#9adcc8;color:#1f7a63;box-shadow:inset 0 0 0 1px #9adcc8}
+  .seg button[data-status="휴식 중"].on{background:#fdf1e6;border-color:#f2c39c;color:#a9622f;box-shadow:inset 0 0 0 1px #f2c39c}
+  .bubble-box{margin-top:6px}
+  .bubble-box textarea{
+    width:100%;min-height:62px;resize:vertical;border:1px solid var(--line);border-radius:12px;
+    padding:9px 11px;font-size:13px;outline:none;background:#fdfbf7;
+  }
+  .bubble-box textarea:focus{border-color:#a9d9ef;box-shadow:0 0 0 3px rgba(126,200,227,.18);background:#fff}
+  .bubble-actions{display:flex;gap:6px;margin-top:6px}
+  .panel-foot{margin-top:16px;padding-top:12px;border-top:1px dashed var(--line);display:flex;gap:6px;flex-wrap:wrap}
+  .tip{margin-top:12px;font-size:11.5px;color:#9a92a3;line-height:1.6}
+
+  /* ---------- footer / help ---------- */
+  .help{
+    margin-top:20px;background:linear-gradient(160deg,#fffdf9,#fbf6ee);border:1px solid var(--line);
+    border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow-sm);
+  }
+  .help h3{font-size:13.5px;margin-bottom:8px}
+  .help-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px 18px}
+  .help-item{font-size:12.5px;color:#6f6879;line-height:1.55}
+  .help-item b{color:#4b4356}
+  footer{margin-top:22px;text-align:center;font-size:11.5px;color:#a9a2b2;line-height:1.8}
+  footer a{color:#7a7283}
+
+  /* ---------- modal ---------- */
+  .modal{position:fixed;inset:0;background:rgba(52,45,60,.42);backdrop-filter:blur(3px);z-index:50;display:flex;align-items:center;justify-content:center;padding:16px}
+  .modal[hidden]{display:none}
+  .modal-card{
+    width:min(520px,100%);max-height:88vh;overflow:auto;background:#fff;border-radius:22px;padding:20px;
+    box-shadow:0 24px 60px rgba(50,40,30,.28);animation:pop .16s ease-out;
+  }
+  @keyframes pop{from{transform:scale(.97);opacity:.6}to{transform:scale(1);opacity:1}}
+  .modal-card h3{font-size:16px;margin-bottom:4px}
+  .modal-card p.lead{font-size:12.5px;color:var(--ink-soft);margin:2px 0 14px;line-height:1.6}
+  .modal-card label{display:block;font-size:11.5px;font-weight:800;color:#8a8292;margin:12px 0 5px}
+  .modal-card input[type=text]{
+    width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:13px;outline:none;background:#fdfbf7;
+  }
+  .modal-card input[type=text]:focus{border-color:#a9d9ef;box-shadow:0 0 0 3px rgba(126,200,227,.18);background:#fff}
+  .modal-actions{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+  .status-line{font-size:12px;margin-top:10px;padding:9px 11px;border-radius:10px;line-height:1.5;background:#f7f2ea;color:#7a7283}
+  .status-line.ok{background:#eef9f4;color:#1f7a63}
+  .status-line.err{background:#fdf2f1;color:#b4453f}
+  .jamo-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:4px}
+  .jamo-grid button{
+    aspect-ratio:1;border-radius:14px;border:1px solid var(--line);background:#fdfbf7;
+    display:grid;place-items:center;padding:2px;
+  }
+  .jamo-grid button.on{border-color:#8fd0ea;background:#eef8fd;box-shadow:0 0 0 2px rgba(126,200,227,.35)}
+  .jamo-grid button svg{width:100%;height:100%}
+  .color-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+  .color-row button{width:30px;height:30px;border-radius:999px;border:2px solid transparent;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+  .color-row button.on{border-color:#3b3542;box-shadow:0 0 0 3px #fff inset}
+  details.more{margin-top:14px;font-size:12px;color:#6f6879}
+  details.more summary{cursor:pointer;font-weight:800;color:#5d5568;outline:none}
+  details.more ol{margin:8px 0 0;padding-left:18px;line-height:1.75}
+  code{background:#f4efe6;border-radius:5px;padding:1px 5px;font-size:11.5px;font-family:ui-monospace,Menlo,Consolas,monospace}
+  .toast{
+    position:fixed;left:50%;bottom:22px;transform:translate(-50%,14px);z-index:80;
+    background:rgba(48,42,58,.93);color:#fff;font-size:12.5px;font-weight:700;padding:10px 16px;border-radius:999px;
+    opacity:0;pointer-events:none;transition:.2s;box-shadow:0 10px 24px rgba(0,0,0,.2);max-width:88vw;text-align:center;
+  }
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+
+  @media (max-width:1180px){
+    .layout{grid-template-columns:1fr}
+    .panel{position:static;order:-1}
+    .rooms{grid-template-columns:repeat(auto-fit,minmax(270px,1fr))}
+  }
+  @media (max-width:640px){
+    .wrap{padding:14px 12px 40px}
+    .brand h1{font-size:19px}
+    .brand-mark{width:44px;height:44px;border-radius:13px;font-size:22px}
+    .rooms{grid-template-columns:1fr}
+    .stage{min-height:250px}
+    .top-actions{width:100%}
+    .top-actions .btn{flex:1;justify-content:center}
+    .chip{flex:1 0 100%;justify-content:center}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand">
+      <div class="brand-mark">ㅎ</div>
+      <div>
+        <h1>피클 합동 비서실</h1>
+        <p>피클들이 함께 쓰는 우리들의 오피스 · 우리 비서실 피클 <b id="peopleCount">0</b>명</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <span class="chip" id="modeChip"><span class="dot"></span><span id="modeText">로컬 모드</span></span>
+      <button class="btn" data-act="open-fb">⚙️ 실시간 DB 연결</button>
+      <button class="btn primary" data-act="open-invite">+ 동료 피클 초대</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <div class="rooms" id="rooms"></div>
+
+    <aside class="panel">
+      <h3>🎛️ 피클 조종석</h3>
+      <p class="sub">피클을 누르면 상태·말풍선·방을 바꿀 수 있어요.</p>
+
+      <div class="panel-empty" id="selEmpty">아직 선택한 피클이 없어요.<br>방 안의 피클을 눌러 주세요 👆</div>
+
+      <div id="selBody" hidden>
+        <div class="sel-top">
+          <div class="av" id="selAvatar"></div>
+          <div>
+            <strong id="selName">-</strong>
+            <span id="selRole">-</span>
+          </div>
+        </div>
+
+        <div class="field-label">상태</div>
+        <div class="seg">
+          <button data-status="업무 중">업무 중</button>
+          <button data-status="회의 중">회의 중</button>
+          <button data-status="휴식 중">휴식 중</button>
+        </div>
+
+        <div class="field-label">방 이동</div>
+        <div class="seg">
+          <button data-goto="work">🖥️ 작업실</button>
+          <button data-goto="meeting">🗣️ 회의실</button>
+          <button data-goto="lounge">☕ 휴게실</button>
+        </div>
+
+        <div class="field-label">말풍선 메시지</div>
+        <div class="bubble-box">
+          <textarea id="bubbleInput" maxlength="120" placeholder="예: 재경 님, 오늘 일정 정리해 뒀어요!"></textarea>
+          <div class="bubble-actions">
+            <button class="btn small primary" data-act="set-bubble">말풍선 바꾸기</button>
+            <button class="btn small ghost" data-act="clear-bubble">지우기</button>
+          </div>
+        </div>
+
+        <div class="panel-foot">
+          <button class="btn small danger" data-act="delete-pickle">이 피클 내보내기</button>
+        </div>
+      </div>
+
+      <div class="panel-foot">
+        <button class="btn small soft" data-act="open-invite">+ 동료 피클 추가</button>
+        <button class="btn small soft" data-act="copy-link">🔗 초대 링크 복사</button>
+      </div>
+      <p class="tip">💡 방을 클릭해도 선택한 피클이 그 방으로 이동해요. 모든 변경은 이 브라우저에 자동 저장됩니다.</p>
+    </aside>
+  </div>
+
+  <section class="help">
+    <h3>📖 이렇게 써요</h3>
+    <div class="help-grid">
+      <div class="help-item"><b>1. 방 이동</b> — 피클을 고르고 방(작업실·회의실·휴게실)을 클릭하거나 [방 이동] 버튼을 누르세요.</div>
+      <div class="help-item"><b>2. 상태 바꾸기</b> — 업무 중 / 회의 중 / 휴식 중에서 고르면 이름 옆 점 색이 바뀌어요.</div>
+      <div class="help-item"><b>3. 말풍선</b> — 하고 싶은 말을 적고 [말풍선 바꾸기]를 누르면 캐릭터 위에 그대로 보여요.</div>
+      <div class="help-item"><b>4. 회의실</b> — 회의실 아래에 안건을 적어 두고 하나씩 체크하며 회의할 수 있어요.</div>
+      <div class="help-item"><b>5. 동료 초대</b> — [+ 동료 피클 초대]에서 이름·자음·색을 골라 새 피클을 만드세요.</div>
+      <div class="help-item"><b>6. 여럿이 함께</b> — ⚙️ 실시간 DB 연결에 무료 Firebase 주소를 넣으면 친구 피클과 실시간으로 같이 써요.</div>
+    </div>
+  </section>
+
+  <footer>
+    피클 합동 비서실 · GitHub Pages에서 무료로 열리는 페이지예요<br>
+    <span id="repoLine">저장소: kimjaekyeongs/pickle-office</span>
+  </footer>
+</div>
+
+<!-- 실시간 DB 모달 -->
+<div class="modal" id="fbModal" hidden>
+  <div class="modal-card">
+    <h3>⚙️ 실시간 DB 연결</h3>
+    <p class="lead">지금은 이 브라우저에만 저장되는 <b>로컬 모드</b>예요. 아래에 무료 Firebase Realtime Database 주소를 넣으면 친구 피클들과 <b>실시간으로 같은 비서실</b>을 함께 쓸 수 있어요.</p>
+    <label for="fbUrl">Realtime Database URL</label>
+    <input type="text" id="fbUrl" placeholder="https://내프로젝트-default-rtdb.firebaseio.com" autocomplete="off" spellcheck="false">
+    <div class="modal-actions">
+      <button class="btn primary" data-act="connect-fb">연결하기</button>
+      <button class="btn" data-act="disconnect-fb">연결 해제</button>
+      <button class="btn ghost" data-act="close-modal">닫기</button>
+    </div>
+    <div class="status-line" id="fbStatus">아직 연결하지 않았어요. 주소 없이도 이 페이지는 그대로 잘 동작합니다.</div>
+    <details class="more">
+      <summary>무료 DB 주소는 어떻게 만드나요?</summary>
+      <ol>
+        <li><a href="https://console.firebase.google.com/" target="_blank" rel="noopener">Firebase 콘솔</a>에서 프로젝트를 하나 만듭니다(무료 Spark 요금제).</li>
+        <li>왼쪽 메뉴 <b>빌드 → Realtime Database → 데이터베이스 만들기</b>를 누르고, 위치를 고른 뒤 <b>테스트 모드</b>로 시작합니다.</li>
+        <li>데이터베이스 화면 위쪽의 주소(<code>https://xxxx-default-rtdb.firebaseio.com</code>)를 복사해 위 칸에 붙여넣고 [연결하기]를 누르세요.</li>
+        <li>같은 주소를 친구에게도 알려 주면, 친구 피클도 같은 비서실에 들어옵니다.</li>
+      </ol>
+      <p style="margin:8px 0 0">※ 테스트 모드는 누구나 읽고 쓸 수 있어요. 중요한 개인정보는 올리지 마세요. 주소는 이 브라우저에만 저장됩니다.</p>
+    </details>
+  </div>
+</div>
+
+<!-- 동료 초대 모달 -->
+<div class="modal" id="inviteModal" hidden>
+  <div class="modal-card">
+    <h3>+ 동료 피클 초대</h3>
+    <p class="lead">한글 자음 모양의 피클을 하나 더 만들어요. 이름과 자음, 색을 골라 주세요.</p>
+
+    <label for="newName">이름</label>
+    <input type="text" id="newName" maxlength="10" placeholder="예: 미미, 소담, 구름" autocomplete="off">
+
+    <label for="newRole">역할 (선택)</label>
+    <input type="text" id="newRole" maxlength="16" placeholder="예: 일정 담당" autocomplete="off">
+
+    <label>자음 모양</label>
+    <div class="jamo-grid" id="jamoGrid"></div>
+
+    <label>색깔</label>
+    <div class="color-row" id="colorRow"></div>
+
+    <label for="newRoom">처음 있을 방</label>
+    <select id="newRoom" class="btn" style="width:100%;justify-content:flex-start;background:#fdfbf7;border:1px solid var(--line);padding:10px 12px;border-radius:12px"></select>
+
+    <div class="modal-actions">
+      <button class="btn primary" data-act="add-pickle">비서실에 들이기</button>
+      <button class="btn ghost" data-act="close-modal">닫기</button>
+    </div>
+    <div class="status-line" id="inviteStatus">초대 링크를 복사해 친구에게 보내면, 친구도 이 비서실에 피클을 들일 수 있어요.</div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ======================= 기본 데이터 ======================= */
+  var STORE_KEY = 'pickle-office-state-v1';
+  var FBURL_KEY = 'pickle-office-fb-url';
+  var FB_PATH = 'pickle-office/v1';
+
+  var ROOMS = [
+    { id: 'work',    name: '작업실', emoji: '🖥️', sub: '각자 자리에서 업무를 봐요',      status: '업무 중' },
+    { id: 'meeting', name: '회의실', emoji: '🗣️', sub: '원탁에 둘러앉아 안건을 나눠요',  status: '회의 중' },
+    { id: 'lounge',  name: '휴게실', emoji: '☕',  sub: '잠깐 쉬며 상태를 남겨요',        status: '휴식 중' }
+  ];
+  var STATUS_CLASS = { '업무 중': 's-work', '회의 중': 's-meeting', '휴식 중': 's-rest' };
+  var JAMO_LIST = ['ㅎ', 'ㅇ', 'ㅁ', 'ㄱ', 'ㄴ', 'ㄷ', 'ㅅ', 'ㅂ', 'ㅈ', 'ㅊ'];
+  var COLORS = ['#7ec8e3', '#f5a9bc', '#a8d5a2', '#c3aed6', '#f7c59f', '#f6e07b', '#9fe3d4', '#b8c0ff'];
+
+ /* ======================= 캐릭터(자음) 도형 ======================= */
+  var SHAPES = {
+    'ㅎ': { paths: ['M34 17H66', 'M22 31H78'], circles: [{ cx: 50, cy: 62, r: 20 }], eyes: [[42, 57], [58, 57]], mouth: 'M43.5 68q6.5 6.5 13 0', cheeks: true },
+    'ㅇ': { circles: [{ cx: 50, cy: 52, r: 29 }], eyes: [[41, 47], [59, 47]], mouth: 'M43 59q7 7 14 0', cheeks: true },
+    'ㅁ': { paths: ['M24 26H76V80H24Z'], eyes: [[42, 46], [58, 46]], mouth: 'M44 58q6 6 12 0', cheeks: true },
+    'ㄱ': { paths: ['M30 26H70V74'], eyes: [[44, 44], [58, 44]], mouth: 'M44 56q6 6 12 0', cheeks: true },
+    'ㄴ': { paths: ['M30 26V74H70'], eyes: [[42, 44], [56, 44]], mouth: 'M40 56q6 6 12 0', cheeks: true },
+    'ㄷ': { paths: ['M72 26H32V74H72'], eyes: [[46, 46], [58, 46]], mouth: 'M44 58q6 6 12 0', cheeks: true },
+    'ㅅ': { paths: ['M50 24L32 74', 'M50 24L68 74'], eyes: [[46, 48], [54, 48]], narrow: true, mouth: 'M44 60q6 6 12 0', cheeks: true },
+    'ㅂ': { paths: ['M28 26V74', 'M72 26V74', 'M28 50H72'], eyes: [[40, 38], [60, 38]], mouth: 'M42 62q8 7 16 0', cheeks: true },
+    'ㅈ': { paths: ['M28 28H72', 'M50 28L30 74', 'M50 28L70 74'], eyes: [[46, 50], [54, 50]], narrow: true, mouth: 'M44 62q6 6 12 0', cheeks: true },
+    'ㅊ': { paths: ['M44 14q6-4 12 0', 'M28 32H72', 'M50 32L30 76', 'M50 32L70 76'], eyes: [[46, 54], [54, 54]], narrow: true, mouth: 'M44 66q6 5 12 0', cheeks: true }
+  };
+
+  function hexToRgb(hex) {
+    var h = String(hex || '#cccccc').replace('#', '');
+    if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+    var n = parseInt(h, 16);
+    return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+  }
+  function mix(hex, target, amount) {
+    var a = hexToRgb(hex), b = hexToRgb(target);
+    var f = function (x, y) { return Math.round(x + (y - x) * amount); };
+    return 'rgb(' + f(a.r, b.r) + ',' + f(a.g, b.g) + ',' + f(a.b, b.b) + ')';
+  }
+  function tint(hex) { return mix(hex, '#ffffff', 0.82); }
+  function shade(hex) { return mix(hex, '#4a4252', 0.22); }
+
+  function charSVG(p) {
+    var shape = SHAPES[p.jamo] || SHAPES['ㅇ'];
+    var main = shade(p.color);
+    var light = tint(p.color);
+    var ink = '#4a4252';
+    var s = '<svg viewBox="0 0 100 100" role="img" aria-label="' + esc(p.name) + ' 피클">';
+    s += '<circle cx="50" cy="52" r="45" fill="' + light + '"/>';
+    s += '<g stroke="' + main + '" stroke-width="' + (shape.narrow ? 7.5 : 8.5) + '" stroke-linecap="round" stroke-linejoin="round" fill="none">';
+    (shape.paths || []).forEach(function (d) { s += '<path d="' + d + '"/>'; });
+    (shape.circles || []).forEach(function (c) { s += '<circle cx="' + c.cx + '" cy="' + c.cy + '" r="' + c.r + '"/>'; });
+    s += '</g>';
+    if (shape.cheeks) {
+      s += '<g fill="' + p.color + '" opacity="0.55">';
+      s += '<ellipse cx="' + (shape.eyes[0][0] - 13) + '" cy="' + (shape.eyes[0][1] + 8) + '" rx="5" ry="3.4"/>';
+      s += '<ellipse cx="' + (shape.eyes[1][0] + 13) + '" cy="' + (shape.eyes[1][1] + 8) + '" rx="5" ry="3.4"/>';
+      s += '</g>';
+    }
+    var rx = shape.narrow ? 3.0 : 3.6, ry = shape.narrow ? 3.9 : 4.4;
+    shape.eyes.forEach(function (e) {
+      s += '<ellipse cx="' + e[0] + '" cy="' + e[1] + '" rx="' + rx + '" ry="' + ry + '" fill="' + ink + '"/>';
+      s += '<circle cx="' + (e[0] + 0.9) + '" cy="' + (e[1] - 1.5) + '" r="1.05" fill="#ffffff" opacity="0.92"/>';
+    });
+    s += '<path d="' + shape.mouth + '" stroke="' + ink + '" stroke-width="2.6" stroke-linecap="round" fill="none"/>';
+    s += '</svg>';
+    return s;
+  }
+
+  /* ======================= 상태 ======================= */
+  function uid(prefix) { return (prefix || 'p') + '-' + Math.random().toString(36).slice(2, 8); }
+  function nowTime() {
+    try { return new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }); }
+    catch (e) { return ''; }
+  }
+
+  function defaultState() {
+    return {
+      pickles: [
+        { id: 'p-day',    name: '데이',  jamo: 'ㅎ', color: '#7ec8e3', room: 'work',    status: '업무 중', role: '사용자 비서', bubble: '재경 님, 오늘 하루도 힘내세요!' },
+        { id: 'p-sodam',  name: '소담',  jamo: 'ㅅ', color: '#a8d5a2', room: 'work',    status: '업무 중', role: '서류 담당',   bubble: '신규 채용공고 정리 중이에요' },
+        { id: 'p-mimi',   name: '미미',  jamo: 'ㅁ', color: '#f5a9bc', room: 'meeting', status: '회의 중', role: '일정 담당',   bubble: '오늘 안건 세 개 정리했어요' },
+        { id: 'p-gureum', name: '구름',  jamo: 'ㄱ', color: '#c3aed6', room: 'lounge',  status: '휴식 중', role: '집사 도우미', bubble: '잠깐 커피 한 잔 ☕' }
+      ],
+      meetings: [
+        { id: 'm-1', text: '이번 주 일정 한 번에 점검하기', author: '미미', at: nowTime(), done: false },
+        { id: 'm-2', text: '구미 지역 새 채용공고 같이 보기', author: '데이', at: nowTime(), done: false }
+      ]
+    };
+  }
+
+  var state = load();
+  var selectedId = null;
+  var bubbleDraft = null;
+  var memoDraft = '';
+  var newJamo = 'ㅁ';
+  var newColor = COLORS[1];
+  var fb = { ready: false, connected: false, app: null, ref: null, infoRef: null, appName: null, url: null, timer: null };
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(STORE_KEY);
+      if (!raw) return defaultState();
+      var parsed = JSON.parse(raw);
+      if (!parsed || !Array.isArray(parsed.pickles)) return defaultState();
+      if (!Array.isArray(parsed.meetings)) parsed.meetings = [];
+      return parsed;
+    } catch (e) { return defaultState(); }
+  }
+  function saveLocal() {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify({ pickles: state.pickles, meetings: state.meetings })); }
+    catch (e) { /* 저장 공간이 없어도 화면은 계속 동작 */ }
+  }
+  function save() { saveLocal(); schedulePush(); }
+
+  /* ======================= 렌더 ======================= */
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function roomOf(id) {
+    for (var i = 0; i < ROOMS.length; i++) if (ROOMS[i].id === id) return ROOMS[i];
+    return ROOMS[0];
+  }
+
+  var DECO = {
+    work: '<svg class="deco" viewBox="0 0 300 90" preserveAspectRatio="none" aria-hidden="true">' +
+      '<rect x="0" y="66" width="300" height="24" fill="#cfe4f4"/>' +
+      '<rect x="26" y="40" width="52" height="26" rx="5" fill="#ffffff" opacity="0.95"/><rect x="34" y="46" width="36" height="14" rx="3" fill="#bfe0f5"/>' +
+      '<rect x="124" y="40" width="52" height="26" rx="5" fill="#ffffff" opacity="0.95"/><rect x="132" y="46" width="36" height="14" rx="3" fill="#bfe0f5"/>' +
+      '<rect x="222" y="40" width="52" height="26" rx="5" fill="#ffffff" opacity="0.95"/><rect x="230" y="46" width="36" height="14" rx="3" fill="#bfe0f5"/>' +
+      '<circle cx="52" cy="36" r="5" fill="#a8d5a2"/><rect x="50" y="36" width="4" height="6" fill="#8dbf87"/>' +
+      '<circle cx="176" cy="36" r="5" fill="#f5a9bc"/><rect x="174" y="36" width="4" height="6" fill="#df8fa4"/>' +
+      '</svg>',
+    meeting: '<svg class="deco" viewBox="0 0 300 90" preserveAspectRatio="none" aria-hidden="true">' +
+      '<ellipse cx="150" cy="62" rx="118" ry="26" fill="#cfeee3"/>' +
+      '<ellipse cx="150" cy="56" rx="112" ry="23" fill="#e6f8f1"/>' +
+      '<rect x="120" y="50" width="24" height="15" rx="3" fill="#ffffff" opacity="0.95"/><rect x="152" y="48" width="22" height="17" rx="3" fill="#ffffff" opacity="0.95"/>' +
+      '<circle cx="150" cy="40" r="4" fill="#8fd2bf"/>' +
+      '</svg>',
+    lounge: '<svg class="deco" viewBox="0 0 300 90" preserveAspectRatio="none" aria-hidden="true">' +
+      '<rect x="0" y="70" width="300" height="20" fill="#f6dcc6"/>' +
+      '<rect x="58" y="46" width="150" height="26" rx="10" fill="#ffffff" opacity="0.95"/><rect x="66" y="34" width="134" height="18" rx="9" fill="#ffe7d3"/>' +
+      '<rect x="218" y="44" width="16" height="26" rx="4" fill="#e9b98f"/><circle cx="226" cy="34" r="12" fill="#a8d5a2"/><circle cx="214" cy="30" r="8" fill="#bde0b8"/>' +
+      '<circle cx="40" cy="60" r="7" fill="#ffffff" opacity="0.95"/><rect x="38" y="60" width="4" height="10" fill="#e2cbb5"/>' +
+      '</svg>'
+  };
+
+  function pickleHTML(p) {
+    var dot = STATUS_CLASS[p.status] || 's-work';
+    var room = roomOf(p.room);
+    return '<div class="pickle' + (selectedId === p.id ? ' sel' : '') + '" data-id="' + p.id + '" tabindex="0" role="button" aria-label="' + esc(p.name) + ' 선택">' +
+      (p.bubble ? '<div class="bubble">' + esc(p.bubble) + '</div>' : '') +
+      '<div class="avatar">' + charSVG(p) + '</div>' +
+      '<div class="plate"><span class="dot ' + dot + '"></span>' + esc(p.name) + '</div>' +
+      '<div class="prole">' + (p.role ? esc(p.role) : esc(p.status)) + ' · ' + room.name + '</div>' +
+      '</div>';
+  }
+
+  function renderRooms() {
+    var host = document.getElementById('rooms');
+    host.innerHTML = ROOMS.map(function (room) {
+      var list = state.pickles.filter(function (p) { return p.room === room.id; });
+      var inner = list.length
+        ? '<div class="pickles">' + list.map(pickleHTML).join('') + '</div>'
+        : '<div class="empty">아직 아무도 없어요<br><span style="font-size:11.5px">선택한 피클을 이 방으로 옮겨 보세요</span></div>';
+      var notes = room.id === 'meeting' ? notesHTML() : '';
+      return '<section class="room' + (selectedId ? ' has-sel' : '') + '" data-room="' + room.id + '" aria-label="' + room.name + '">' +
+        '<div class="room-head"><div class="room-title"><span class="emoji">' + room.emoji + '</span><h2>' + room.name + '</h2>' +
+        '<span class="count">' + list.length + '</span></div></div>' +
+        '<p class="room-sub">' + room.sub + '</p>' +
+        '<div class="stage">' + DECO[room.id] + inner + '<div class="hint">여기를 누르면 선택한 피클이 ' + room.name + '(으)로 이동해요</div></div>' +
+        notes +
+        '</section>';
+    }).join('');
+    document.getElementById('peopleCount').textContent = state.pickles.length;
+  }
+
+  function notesHTML() {
+    var list = state.meetings || [];
+    var items = list.length ? list.map(function (m) {
+      return '<li class="' + (m.done ? 'done' : '') + '">' +
+        '<button class="sym check" data-act="toggle-memo" data-id="' + m.id + '" title="완료 표시">' + (m.done ? '✓' : '○') + '</button>' +
+        '<span class="txt">' + esc(m.text) + '<span class="meta">' + esc(m.author || '') + (m.at ? ' · ' + esc(m.at) : '') + '</span></span>' +
+        '<button class="sym del" data-act="del-memo" data-id="' + m.id + '" title="지우기">✕</button>' +
+        '</li>';
+    }).join('') : '<li class="memo-empty" style="border:none;background:none;padding:2px">아직 안건이 없어요. 첫 안건을 적어 보세요.</li>';
+    return '<div class="notes">' +
+      '<div class="notes-head"><h3>📝 회의 안건 · 메모</h3><span style="font-size:11px;color:#a9a2b2">' + list.length + '건</span></div>' +
+      '<form class="memo-form" data-act="memo-form"><input type="text" id="memoInput" maxlength="80" value="' + esc(memoDraft) + '" placeholder="안건을 적고 Enter" autocomplete="off">' +
+      '<button class="btn small primary" type="submit">추가</button></form>' +
+      '<ul class="memo-list">' + items + '</ul></div>';
+  }
+
+  function renderPanel() {
+    var sel = null;
+    for (var i = 0; i < state.pickles.length; i++) if (state.pickles[i].id === selectedId) sel = state.pickles[i];
+    var empty = document.getElementById('selEmpty');
+    var body = document.getElementById('selBody');
+
+    if (!sel) {
+      empty.hidden = false; body.hidden = true;
+      return;
+    }
+    empty.hidden = true; body.hidden = false;
+
+    var av = document.getElementById('selAvatar');
+    if (av.dataset.id !== sel.id) { av.innerHTML = charSVG(sel); av.dataset.id = sel.id; }
+    document.getElementById('selName').textContent = sel.name;
+    document.getElementById('selRole').textContent = (sel.role || '동료 피클') + ' · ' + roomOf(sel.room).name + ' · ' + sel.status;
+
+    Array.prototype.forEach.call(document.querySelectorAll('#selBody [data-status]'), function (b) {
+      b.classList.toggle('on', b.getAttribute('data-status') === sel.status);
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('#selBody [data-goto]'), function (b) {
+      b.classList.toggle('on', b.getAttribute('data-goto') === sel.room);
+    });
+
+    var ta = document.getElementById('bubbleInput');
+    if (document.activeElement !== ta) ta.value = bubbleDraft !== null ? bubbleDraft : (sel.bubble || '');
+  }
+
+  function render() { renderRooms(); renderPanel(); }
+
+  function select(id) {
+    if (selectedId === id) return;
+    selectedId = id;
+    bubbleDraft = null;
+    render();
+  }
+
+  function toast(msg) {
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function () { t.classList.remove('show'); }, 2400);
+  }
+
+  /* ======================= 동작 ======================= */
+  function selected() {
+    for (var i = 0; i < state.pickles.length; i++) if (state.pickles[i].id === selectedId) return state.pickles[i];
+    return null;
+  }
+
+  function moveTo(roomId) {
+    var p = selected();
+    if (!p) { toast('먼저 피클을 눌러 선택해 주세요'); return; }
+    var room = roomOf(roomId);
+    var changed = p.room !== roomId;
+    p.room = roomId;
+    p.status = room.status;
+    save(); render();
+    toast(p.name + ' 님이 ' + room.name + (changed ? '(으)로 이동했어요' : '에 있어요'));
+  }
+
+  function setStatus(status) {
+    var p = selected();
+    if (!p) return;
+    p.status = status;
+    save(); render();
+    toast(p.name + ' 님 상태: ' + status);
+  }
+
+  function setBubble() {
+    var p = selected();
+    if (!p) return;
+    var ta = document.getElementById('bubbleInput');
+    var v = ta.value.trim();
+    p.bubble = v;
+    bubbleDraft = null;
+    save(); render();
+    toast(v ? '말풍선을 바꿨어요' : '말풍선을 지웠어요');
+  }
+
+  function addMemo(text) {
+    var v = (text || '').trim();
+    if (!v) return;
+    var p = selected();
+    state.meetings = state.meetings || [];
+    state.meetings.unshift({
+      id: uid('m'), text: v.slice(0, 80), author: p ? p.name : '나', at: nowTime(), done: false
+    });
+    memoDraft = '';
+    save(); render();
+  }
+
+  function openModal(id) { document.getElementById(id).hidden = false; }
+  function closeModal(el) { (el || document.querySelector('.modal:not([hidden])') || {}).hidden = true; }
+
+  /* ======================= 초대 모달 ======================= */
+  function buildInviteUI() {
+    var grid = document.getElementById('jamoGrid');
+    grid.innerHTML = JAMO_LIST.map(function (j) {
+      return '<button type="button" data-act="pick-jamo" data-jamo="' + j + '" class="' + (j === newJamo ? 'on' : '') + '">' +
+        charSVG({ name: '자음', jamo: j, color: newColor }) + '</button>';
+    }).join('');
+
+    var row = document.getElementById('colorRow');
+    row.innerHTML = COLORS.map(function (c) {
+      return '<button type="button" data-act="pick-color" data-color="' + c + '" style="background:' + c + '" class="' + (c === newColor ? 'on' : '') + '" aria-label="색 ' + c + '"></button>';
+    }).join('');
+
+    var sel = document.getElementById('newRoom');
+    sel.innerHTML = ROOMS.map(function (r) { return '<option value="' + r.id + '">' + r.emoji + ' ' + r.name + '</option>'; }).join('');
+  }
+
+  function addPickle() {
+    var nameEl = document.getElementById('newName');
+    var roleEl = document.getElementById('newRole');
+    var roomEl = document.getElementById('newRoom');
+    var name = (nameEl.value || '').trim();
+    if (!name) { document.getElementById('inviteStatus').textContent = '이름을 먼저 적어 주세요.'; nameEl.focus(); return; }
+    var room = roomEl.value || 'work';
+    var dup = state.pickles.some(function (p) { return p.name === name; });
+    if (dup) { document.getElementById('inviteStatus').textContent = '같은 이름의 피클이 이미 있어요. 다른 이름으로 해 주세요.'; return; }
+
+    state.pickles.push({
+      id: uid('p'), name: name.slice(0, 10), jamo: newJamo, color: newColor,
+      room: room, status: roomOf(room).status, role: (roleEl.value || '').trim().slice(0, 16), bubble: ''
+    });
+    save();
+    selectedId = state.pickles[state.pickles.length - 1].id;
+    render();
+    nameEl.value = ''; roleEl.value = '';
+    document.getElementById('inviteStatus').textContent = name + ' 피클을 ' + roomOf(room).name + '에 들였어요!';
+    closeModal(document.getElementById('inviteModal'));
+    toast(name + ' 피클이 비서실에 들어왔어요 🎉');
+  }
+
+  /* ======================= Firebase 실시간 동기화 ======================= */
+  function loadScript(src) {
+    return new Promise(function (resolve, reject) {
+      var s = document.createElement('script');
+      s.src = src; s.async = true;
+      s.onload = function () { resolve(); };
+      s.onerror = function () { reject(new Error('Firebase 스크립트를 불러오지 못했어요 (인터넷 연결을 확인해 주세요)')); };
+      document.head.appendChild(s);
+    });
+  }
+
+  function setMode(live, text) {
+    var chip = document.getElementById('modeChip');
+    var label = document.getElementById('modeText');
+    chip.classList.toggle('live', !!live);
+    label.textContent = text;
+  }
+
+  function fbStatus(msg, kind) {
+    var el = document.getElementById('fbStatus');
+    el.className = 'status-line' + (kind ? ' ' + kind : '');
+    el.textContent = msg;
+  }
+
+  function normalize(raw) {
+    if (!raw) return null;
+    var pickles = raw.pickles;
+    var meetings = raw.meetings;
+    if (pickles && !Array.isArray(pickles)) pickles = Object.keys(pickles).map(function (k) { return pickles[k]; });
+    if (meetings && !Array.isArray(meetings)) meetings = Object.keys(meetings).map(function (k) { return meetings[k]; });
+    if (!Array.isArray(pickles)) return null;
+    pickles = pickles.filter(function (p) { return p && p.name; }).map(function (p) {
+      return {
+        id: String(p.id || uid('p')), name: String(p.name).slice(0, 10), jamo: p.jamo || 'ㅇ',
+        color: p.color || '#7ec8e3', room: (p.room === 'meeting' || p.room === 'lounge') ? p.room : 'work',
+        status: (p.status === '회의 중' || p.status === '휴식 중') ? p.status : '업무 중',
+        role: p.role ? String(p.role) : '', bubble: p.bubble ? String(p.bubble) : ''
+      };
+    });
+    meetings = Array.isArray(meetings) ? meetings.filter(function (m) { return m && m.text; }).map(function (m) {
+      return { id: String(m.id || uid('m')), text: String(m.text), author: m.author ? String(m.author) : '', at: m.at ? String(m.at) : '', done: !!m.done };
+    }) : [];
+    return { pickles: pickles, meetings: meetings };
+  }
+
+  function schedulePush() {
+    if (!fb.connected) return;
+    clearTimeout(fb.timer);
+    fb.timer = setTimeout(pushNow, 220);
+  }
+
+  function pushNow() {
+    if (!fb.connected || !fb.ref) return;
+    var payload = { pickles: state.pickles, meetings: state.meetings, updatedAt: Date.now() };
+    fb.ref.set(payload).catch(function (err) {
+      fbStatus('저장 실패: ' + err.message + ' — Firebase 규칙에서 쓰기를 허용했는지 확인해 주세요.', 'err');
+      toast('실시간 저장에 실패했어요');
+    });
+  }
+
+  function connectFirebase(rawUrl, silent) {
+    var url = String(rawUrl || '').trim().replace(/\/+$/, '');
+    if (!url) { fbStatus('주소를 입력해 주세요.', 'err'); return Promise.resolve(false); }
+    if (!/^https:\/\/[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+$/.test(url)) {
+      fbStatus('주소 형식이 올바르지 않아요. 예: https://내프로젝트-default-rtdb.firebaseio.com', 'err');
+      return Promise.resolve(false);
+    }
+    fbStatus('연결하는 중…');
+
+    return loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js')
+      .then(function () { return loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js'); })
+      .then(function () {
+        disconnectFirebase(true);
+        fb.appName = 'pickle-office-' + Date.now();
+        fb.app = firebase.initializeApp({ databaseURL: url }, fb.appName);
+        fb.ref = firebase.database(fb.app).ref(FB_PATH);
+        fb.connected = true;
+        fb.url = url;
+        try { localStorage.setItem(FBURL_KEY, url); } catch (e) {}
+
+        fb.ref.on('value', function (snap) {
+          var val = snap.val();
+          if (val == null) {
+            pushNow();
+            fbStatus('연결됐어요! 이 비서실의 첫 내용을 저장하는 중이에요.', 'ok');
+            return;
+          }
+          var remote = normalize(val);
+          if (!remote) return; // 알 수 없는 형식의 데이터는 덮어쓰지 않음
+          var localJson = JSON.stringify({ pickles: state.pickles, meetings: state.meetings });
+          var remoteJson = JSON.stringify(remote);
+          if (localJson === remoteJson) return;
+          state.pickles = remote.pickles;
+          state.meetings = remote.meetings;
+          if (selectedId && !state.pickles.some(function (p) { return p.id === selectedId; })) selectedId = null;
+          saveLocal();
+          render();
+        }, function (err) {
+          fb.connected = false;
+          setMode(false, '로컬 모드');
+          fbStatus('연결 오류: ' + err.message + ' — Firebase 규칙(읽기/쓰기 허용)과 주소를 확인해 주세요.', 'err');
+          toast('실시간 DB 연결에 문제가 있어요');
+        });
+
+        fb.infoRef = firebase.database(fb.app).ref('.info/connected');
+        fb.infoRef.on('value', function (s) {
+          if (s.val() === true) {
+            setMode(true, '실시간 연결됨');
+            fbStatus('실시간 연결됨 — 이제 친구 피클과 같은 비서실을 함께 써요.', 'ok');
+          } else {
+            setMode(false, '연결 중…');
+          }
+        });
+
+        if (!silent) toast('실시간 DB에 연결했어요');
+        return true;
+      })
+      .catch(function (err) {
+        fb.connected = false;
+        setMode(false, '로컬 모드');
+        fbStatus('연결하지 못했어요: ' + err.message, 'err');
+        if (!silent) toast('연결하지 못했어요');
+        return false;
+      });
+  }
+
+  function disconnectFirebase(silent) {
+    try {
+      if (fb.infoRef) { fb.infoRef.off(); fb.infoRef = null; }
+      if (fb.ref) { fb.ref.off(); }
+      if (fb.app) { fb.app.delete(); }
+    } catch (e) {}
+    fb.connected = false; fb.ref = null; fb.app = null; fb.appName = null; fb.url = null;
+    if (!silent) {
+      try { localStorage.removeItem(FBURL_KEY); } catch (e) {}
+      setMode(false, '로컬 모드');
+      fbStatus('연결을 끊었어요. 이제 이 브라우저에만 저장됩니다.');
+      toast('로컬 모드로 돌아왔어요');
+    }
+  }
+
+  /* ======================= 이벤트 ======================= */
+  document.addEventListener('click', function (e) {
+    var t = e.target;
+
+    var pickleEl = t.closest ? t.closest('.pickle') : null;
+    if (pickleEl) { select(pickleEl.getAttribute('data-id')); return; }
+
+    var actEl = t.closest ? t.closest('[data-act]') : null;
+    if (actEl) {
+      var act = actEl.getAttribute('data-act');
+      if (act === 'open-fb') { openModal('fbModal'); return; }
+      if (act === 'open-invite') { buildInviteUI(); openModal('inviteModal'); return; }
+      if (act === 'close-modal') { var m = actEl.closest('.modal'); if (m) m.hidden = true; return; }
+      if (act === 'set-bubble') { setBubble(); return; }
+      if (act === 'clear-bubble') {
+        var ta0 = document.getElementById('bubbleInput'); ta0.value = ''; bubbleDraft = null; setBubble(); return;
+      }
+      if (act === 'delete-pickle') {
+        var p = selected();
+        if (!p) return;
+        if (window.confirm(p.name + ' 피클을 비서실에서 내보낼까요?')) {
+          state.pickles = state.pickles.filter(function (x) { return x.id !== p.id; });
+          selectedId = null; bubbleDraft = null;
+          save(); render();
+          toast(p.name + ' 피클을 내보냈어요');
+        }
+        return;
+      }
+      if (act === 'add-memo') { addMemo(document.getElementById('memoInput').value); return; }
+      if (act === 'toggle-memo') {
+        var mid = actEl.getAttribute('data-id');
+        state.meetings.forEach(function (m2) { if (m2.id === mid) m2.done = !m2.done; });
+        save(); render(); return;
+      }
+      if (act === 'del-memo') {
+        var did = actEl.getAttribute('data-id');
+        state.meetings = state.meetings.filter(function (m3) { return m3.id !== did; });
+        save(); render(); return;
+      }
+      if (act === 'pick-jamo') { newJamo = actEl.getAttribute('data-jamo'); buildInviteUI(); return; }
+      if (act === 'pick-color') { newColor = actEl.getAttribute('data-color'); buildInviteUI(); return; }
+      if (act === 'add-pickle') { addPickle(); return; }
+      if (act === 'copy-link') {
+        var link = location.href.split('#')[0];
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(link).then(function () { toast('초대 링크를 복사했어요'); },
+            function () { toast('링크: ' + link); });
+        } else { toast('링크: ' + link); }
+        return;
+      }
+      if (act === 'connect-fb') { connectFirebase(document.getElementById('fbUrl').value); return; }
+      if (act === 'disconnect-fb') { disconnectFirebase(); return; }
+      return;
+    }
+
+    var gotoEl = t.closest ? t.closest('[data-goto]') : null;
+    if (gotoEl) { moveTo(gotoEl.getAttribute('data-goto')); return; }
+
+    var statusEl = t.closest ? t.closest('#selBody [data-status]') : null;
+    if (statusEl) { setStatus(statusEl.getAttribute('data-status')); return; }
+
+    if (t.closest && t.closest('.notes, input, textarea, select, form')) return; // 회의 메모 입력 중에는 방 이동 안 함
+
+    var roomEl = t.closest ? t.closest('.room') : null;
+    if (roomEl) { moveTo(roomEl.getAttribute('data-room')); }
+  });
+
+  // 회의 안건 입력 — Enter 제출, 타이핑 중 재렌더 없이 값 유지
+  document.addEventListener('submit', function (e) {
+    var form = e.target.closest ? e.target.closest('[data-act="memo-form"]') : null;
+    if (form) {
+      e.preventDefault();
+      var input = form.querySelector('input');
+      addMemo(input.value);
+    }
+  });
+  document.addEventListener('input', function (e) {
+    if (e.target && e.target.id === 'bubbleInput') bubbleDraft = e.target.value;
+    if (e.target && e.target.id === 'memoInput') memoDraft = e.target.value;
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      var open = document.querySelector('.modal:not([hidden])');
+      if (open) open.hidden = true;
+    }
+    if (e.key === 'Enter' && e.target && e.target.classList && e.target.classList.contains('pickle')) {
+      select(e.target.getAttribute('data-id'));
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter' && e.target && e.target.id === 'bubbleInput') {
+      e.preventDefault(); setBubble();
+    }
+  });
+  // 모달 바깥(어두운 배경) 누르면 닫기
+  Array.prototype.forEach.call(document.querySelectorAll('.modal'), function (mod) {
+    mod.addEventListener('click', function (e) { if (e.target === mod) mod.hidden = true; });
+  });
+
+  /* ======================= 시작 ======================= */
+  render();
+
+  var savedUrl = null;
+  try { savedUrl = localStorage.getItem(FBURL_KEY); } catch (e) {}
+  if (savedUrl) {
+    document.getElementById('fbUrl').value = savedUrl;
+    connectFirebase(savedUrl, true);
+  }
+})();
+</script>
+</body>
+</html>
