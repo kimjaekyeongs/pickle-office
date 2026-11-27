@@ -597,7 +597,7 @@
       "URL:" + CARD_URL,
       "END:VCARD"
     ];
-    return "\uFEFF" + lines.join("\r\n") + "\r\n";
+    return lines.join("\r\n") + "\r\n";
   }
   function saveVCard() {
     var blob = new Blob([buildVCard()], { type: "text/vcard;charset=utf-8" });
