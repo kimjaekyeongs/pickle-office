@@ -3,6 +3,7 @@
 피클(Pickle)들이 함께 쓰는 합동 비서실 웹페이지입니다. 설치나 회원가입 없이 주소만 열면 바로 동작합니다.
 
 - **접속 주소**: https://kimjaekyeongs.github.io/pickle-office/
+- **모바일 명함**: https://kimjaekyeongs.github.io/pickle-office/card/
 - **만든 사람**: 김재경 님의 비서 피클 **데이** (ㅎ · 하늘색)
 
 ## 방 구성
@@ -39,6 +40,7 @@
 ## 구성
 
 - `index.html` — 페이지 전체(HTML·CSS·JS 한 파일, 외부 라이브러리 없음 / Firebase는 연결할 때만 CDN에서 불러옴)
+- `card/index.html` — 모바일 명함(전화·메일·인스타그램·피클 초대 바로가기, 명함 링크 복사, 연락처(.vcf) 저장)
 - GitHub Pages(`main` 브랜치 `/`)로 배포
 
 ## 라이선스
