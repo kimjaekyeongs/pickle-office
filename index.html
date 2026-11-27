@@ -539,7 +539,7 @@
   var memoDraft = '';
   var newJamo = 'ㅁ';
   var newColor = COLORS[1];
-  var fb = { ready: false, connected: false, app: null, ref: null, infoRef: null, appName: null, url: null, timer: null };
+  var fb = { ready: false, connected: false, live: false, app: null, ref: null, infoRef: null, appName: null, url: null, timer: null, readyTimer: null };
 
   function load() {
     try {
@@ -840,7 +840,7 @@
       fbStatus('주소 형식이 올바르지 않아요. 예: https://내프로젝트-default-rtdb.firebaseio.com', 'err');
       return Promise.resolve(false);
     }
-    fbStatus('연결하는 중…');
+    fbStatus('연결하는 중… (몇 초 걸릴 수 있어요)');
 
     return loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js')
       .then(function () { return loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js'); })
@@ -850,6 +850,7 @@
         fb.app = firebase.initializeApp({ databaseURL: url }, fb.appName);
         fb.ref = firebase.database(fb.app).ref(FB_PATH);
         fb.connected = true;
+        fb.live = false;
         fb.url = url;
         try { localStorage.setItem(FBURL_KEY, url); } catch (e) {}
 
@@ -880,14 +881,26 @@
         fb.infoRef = firebase.database(fb.app).ref('.info/connected');
         fb.infoRef.on('value', function (s) {
           if (s.val() === true) {
+            fb.live = true;
+            clearTimeout(fb.readyTimer);
             setMode(true, '실시간 연결됨');
             fbStatus('실시간 연결됨 — 이제 친구 피클과 같은 비서실을 함께 써요.', 'ok');
+            if (!silent && !fb.greeted) { fb.greeted = true; toast('실시간 DB에 연결했어요'); }
           } else {
             setMode(false, '연결 중…');
           }
         });
 
-        if (!silent) toast('실시간 DB에 연결했어요');
+        // 15초 안에 실제 연결이 확인되지 않으면 깔끔하게 로컬 모드로 돌아갑니다
+        clearTimeout(fb.readyTimer);
+        fb.readyTimer = setTimeout(function () {
+          if (!fb.connected || fb.live) return;
+          try { localStorage.removeItem(FBURL_KEY); } catch (e) {}
+          fbStatus('연결하지 못했어요. 주소가 정확한지, Firebase 규칙에서 읽기/쓰기를 허용했는지 확인해 주세요. (로컬 모드로 계속 쓸 수 있어요)', 'err');
+          disconnectFirebase(true);
+          setMode(false, '로컬 모드');
+          if (!silent) toast('실시간 DB에 연결하지 못했어요 — 로컬 모드로 계속해요');
+        }, 15000);
         return true;
       })
       .catch(function (err) {
@@ -901,11 +914,12 @@
 
   function disconnectFirebase(silent) {
     try {
+      clearTimeout(fb.readyTimer);
       if (fb.infoRef) { fb.infoRef.off(); fb.infoRef = null; }
       if (fb.ref) { fb.ref.off(); }
       if (fb.app) { fb.app.delete(); }
     } catch (e) {}
-    fb.connected = false; fb.ref = null; fb.app = null; fb.appName = null; fb.url = null;
+    fb.connected = false; fb.live = false; fb.greeted = false; fb.ref = null; fb.app = null; fb.appName = null; fb.url = null;
     if (!silent) {
       try { localStorage.removeItem(FBURL_KEY); } catch (e) {}
       setMode(false, '로컬 모드');
